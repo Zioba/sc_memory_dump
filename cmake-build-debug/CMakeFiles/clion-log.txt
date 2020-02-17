@@ -1,6 +1,6 @@
-/home/artsiom/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/artsiom/Desktop/wave_find_path_sc_memory-master
+/home/alexander/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/alexander/work/sc_memory_dump
 -- Only GCC is supported on Linux
 -- CMake generates Unix Makefiles
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug
+-- Build files have been written to: /home/alexander/work/sc_memory_dump/cmake-build-debug

@@ -39,19 +39,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/artsiom/work/clion-2019.3.3/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /home/alexander/work/clion-2019.3.3/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /home/artsiom/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -E remove -f
+RM = /home/alexander/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/artsiom/Desktop/wave_find_path_sc_memory-master
+CMAKE_SOURCE_DIR = /home/alexander/work/sc_memory_dump
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug
+CMAKE_BINARY_DIR = /home/alexander/work/sc_memory_dump/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-b
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/artsiom/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/alexander/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/artsiom/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/home/alexander/work/clion-2019.3.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles /home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles /home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -122,6 +122,60 @@ wave: cmake_check_build_system
 wave/fast:
 	$(MAKE) -f CMakeFiles/wave.dir/build.make CMakeFiles/wave.dir/build
 .PHONY : wave/fast
+
+model/Edge.o: model/Edge.cpp.o
+
+.PHONY : model/Edge.o
+
+# target to build an object file
+model/Edge.cpp.o:
+	$(MAKE) -f CMakeFiles/wave.dir/build.make CMakeFiles/wave.dir/model/Edge.cpp.o
+.PHONY : model/Edge.cpp.o
+
+model/Edge.i: model/Edge.cpp.i
+
+.PHONY : model/Edge.i
+
+# target to preprocess a source file
+model/Edge.cpp.i:
+	$(MAKE) -f CMakeFiles/wave.dir/build.make CMakeFiles/wave.dir/model/Edge.cpp.i
+.PHONY : model/Edge.cpp.i
+
+model/Edge.s: model/Edge.cpp.s
+
+.PHONY : model/Edge.s
+
+# target to generate assembly for a file
+model/Edge.cpp.s:
+	$(MAKE) -f CMakeFiles/wave.dir/build.make CMakeFiles/wave.dir/model/Edge.cpp.s
+.PHONY : model/Edge.cpp.s
+
+model/Node.o: model/Node.cpp.o
+
+.PHONY : model/Node.o
+
+# target to build an object file
+model/Node.cpp.o:
+	$(MAKE) -f CMakeFiles/wave.dir/build.make CMakeFiles/wave.dir/model/Node.cpp.o
+.PHONY : model/Node.cpp.o
+
+model/Node.i: model/Node.cpp.i
+
+.PHONY : model/Node.i
+
+# target to preprocess a source file
+model/Node.cpp.i:
+	$(MAKE) -f CMakeFiles/wave.dir/build.make CMakeFiles/wave.dir/model/Node.cpp.i
+.PHONY : model/Node.cpp.i
+
+model/Node.s: model/Node.cpp.s
+
+.PHONY : model/Node.s
+
+# target to generate assembly for a file
+model/Node.cpp.s:
+	$(MAKE) -f CMakeFiles/wave.dir/build.make CMakeFiles/wave.dir/model/Node.cpp.s
+.PHONY : model/Node.cpp.s
 
 utils.o: utils.cpp.o
 
@@ -186,6 +240,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... wave"
 	@echo "... edit_cache"
+	@echo "... model/Edge.o"
+	@echo "... model/Edge.i"
+	@echo "... model/Edge.s"
+	@echo "... model/Node.o"
+	@echo "... model/Node.i"
+	@echo "... model/Node.s"
 	@echo "... utils.o"
 	@echo "... utils.i"
 	@echo "... utils.s"

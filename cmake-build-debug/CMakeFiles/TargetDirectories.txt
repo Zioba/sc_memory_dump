@@ -1,3 +1,3 @@
-/home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles/wave.dir
-/home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/wave.dir
+/home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/edit_cache.dir

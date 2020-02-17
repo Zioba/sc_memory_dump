@@ -1,4 +1,4 @@
-# Install script for directory: /home/artsiom/Desktop/wave_find_path_sc_memory-master
+# Install script for directory: /home/alexander/work/sc_memory_dump
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/alexander/work/sc_memory_dump/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

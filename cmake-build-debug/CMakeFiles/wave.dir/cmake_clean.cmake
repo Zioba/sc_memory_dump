@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
-  "/home/artsiom/work/ostis/sc-machine/bin/wave"
-  "/home/artsiom/work/ostis/sc-machine/bin/wave.pdb"
+  "/home/alexander/work/ostis/sc-machine/bin/wave"
+  "/home/alexander/work/ostis/sc-machine/bin/wave.pdb"
+  "CMakeFiles/wave.dir/model/Edge.cpp.o"
+  "CMakeFiles/wave.dir/model/Node.cpp.o"
   "CMakeFiles/wave.dir/utils.cpp.o"
   "CMakeFiles/wave.dir/wavefindpath.cpp.o"
 )

@@ -4,14 +4,16 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/artsiom/Desktop/wave_find_path_sc_memory-master/utils.cpp" "/home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles/wave.dir/utils.cpp.o"
-  "/home/artsiom/Desktop/wave_find_path_sc_memory-master/wavefindpath.cpp" "/home/artsiom/Desktop/wave_find_path_sc_memory-master/cmake-build-debug/CMakeFiles/wave.dir/wavefindpath.cpp.o"
+  "/home/alexander/work/sc_memory_dump/model/Edge.cpp" "/home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/wave.dir/model/Edge.cpp.o"
+  "/home/alexander/work/sc_memory_dump/model/Node.cpp" "/home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/wave.dir/model/Node.cpp.o"
+  "/home/alexander/work/sc_memory_dump/utils.cpp" "/home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/wave.dir/utils.cpp.o"
+  "/home/alexander/work/sc_memory_dump/wavefindpath.cpp" "/home/alexander/work/sc_memory_dump/cmake-build-debug/CMakeFiles/wave.dir/wavefindpath.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/artsiom/work/ostis/sc-machine/sc-memory"
+  "/home/alexander/work/ostis/sc-machine/sc-memory"
   "/usr/include/glib-2.0"
   "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
   )
