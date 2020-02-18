@@ -22,6 +22,20 @@ iostream
 cstdio
 -
 
+/home/artsiom/Desktop/wave_find_path_sc_memory-master/wavefindpath.cpp
+sc_memory_headers.h
+/home/artsiom/Desktop/wave_find_path_sc_memory-master/sc_memory_headers.h
+sc_helper.h
+/home/artsiom/Desktop/wave_find_path_sc_memory-master/sc_helper.h
+utils.h
+/home/artsiom/Desktop/wave_find_path_sc_memory-master/utils.h
+stdio.h
+-
+iostream
+-
+unistd.h
+-
+
 /home/artsiom/work/ostis/sc-machine/sc-memory/sc-store/sc_config.h
 sc_types.h
 /home/artsiom/work/ostis/sc-machine/sc-memory/sc-store/sc_types.h

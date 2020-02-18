@@ -11,7 +11,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8c2dc87-812b-4ecf-b755-13c6eab5cf90" name="Default Changelist" comment="" />
+    <list default="true" id="b8c2dc87-812b-4ecf-b755-13c6eab5cf90" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wave.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/wave.dir/CXX.includecache" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +24,11 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1X11R16zrJiMTG9FzlXjmE1Ijkh" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -54,6 +61,9 @@
       <workItem from="1580642182112" duration="7194000" />
       <workItem from="1580730109949" duration="257000" />
       <workItem from="1581409053865" duration="270000" />
+      <workItem from="1581521605346" duration="3173000" />
+      <workItem from="1581605528887" duration="985000" />
+      <workItem from="1581667852241" duration="179000" />
     </task>
     <servers />
   </component>
@@ -61,22 +71,26 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1874" height="246" key="GridCell.Tab.0.bottom" timestamp="1580711116314">
+    <state x="418" y="136" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581523318923">
       <screen x="0" y="0" width="1920" height="956" />
     </state>
-    <state width="1874" height="246" key="GridCell.Tab.0.bottom/0.0.1920.956@0.0.1920.956" timestamp="1580711116314" />
-    <state width="1874" height="246" key="GridCell.Tab.0.center" timestamp="1580711116313">
+    <state x="418" y="136" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.956@0.0.1920.956" timestamp="1581523318923" />
+    <state width="1874" height="246" key="GridCell.Tab.0.bottom" timestamp="1581534609061">
       <screen x="0" y="0" width="1920" height="956" />
     </state>
-    <state width="1874" height="246" key="GridCell.Tab.0.center/0.0.1920.956@0.0.1920.956" timestamp="1580711116313" />
-    <state width="1874" height="246" key="GridCell.Tab.0.left" timestamp="1580711116312">
+    <state width="1874" height="246" key="GridCell.Tab.0.bottom/0.0.1920.956@0.0.1920.956" timestamp="1581534609061" />
+    <state width="1874" height="246" key="GridCell.Tab.0.center" timestamp="1581534609060">
       <screen x="0" y="0" width="1920" height="956" />
     </state>
-    <state width="1874" height="246" key="GridCell.Tab.0.left/0.0.1920.956@0.0.1920.956" timestamp="1580711116312" />
-    <state width="1874" height="246" key="GridCell.Tab.0.right" timestamp="1580711116313">
+    <state width="1874" height="246" key="GridCell.Tab.0.center/0.0.1920.956@0.0.1920.956" timestamp="1581534609060" />
+    <state width="1874" height="246" key="GridCell.Tab.0.left" timestamp="1581534609059">
       <screen x="0" y="0" width="1920" height="956" />
     </state>
-    <state width="1874" height="246" key="GridCell.Tab.0.right/0.0.1920.956@0.0.1920.956" timestamp="1580711116313" />
+    <state width="1874" height="246" key="GridCell.Tab.0.left/0.0.1920.956@0.0.1920.956" timestamp="1581534609059" />
+    <state width="1874" height="246" key="GridCell.Tab.0.right" timestamp="1581534609060">
+      <screen x="0" y="0" width="1920" height="956" />
+    </state>
+    <state width="1874" height="246" key="GridCell.Tab.0.right/0.0.1920.956@0.0.1920.956" timestamp="1581534609060" />
     <state width="1874" height="306" key="GridCell.Tab.1.bottom" timestamp="1580236748651">
       <screen x="0" y="0" width="1920" height="956" />
     </state>
