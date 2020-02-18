@@ -12,44 +12,13 @@ extern "C" {
 
 using namespace std;
 
-void printEl2(sc_memory_context *context, sc_addr element, FILE *f)
-{
-    sc_addr idtf;
-    sc_type type;
-    sc_memory_get_element_type(context, element, &type);
-    if ((sc_type_node & type) == sc_type_node)
-    {
-        if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, element, &idtf))
-        {
-            sc_stream *stream;
-            sc_uint32 length = 0, read_length = 0;
-            sc_char *data;
-            sc_memory_get_link_content(context, idtf, &stream);
-            sc_stream_get_length(stream, &length);
-            data = (sc_char *)calloc(length + 1, sizeof(sc_char));
-            sc_stream_read_data(stream, data, length, &read_length);
-            data[length] = '\0';
-            fprintf(f, "%s", data);
-            sc_stream_free(stream);
-            free(data);
-        }
-        else
-        {
-            fprintf(f, "%u|%u", element.seg, element.offset);
-        }
-    }
-    else
-    {
-        fprintf(f, "%s", "edge");
-    }
-}
-
 void printEl(sc_memory_context *context, sc_addr element, FILE *f)
 {
     sc_addr idtf;
     sc_type type;
     sc_memory_get_element_type(context, element, &type);
-    if ((sc_type_node & type) == sc_type_node) {
+    if (((sc_type_node & type) == sc_type_node) |
+        ((sc_type_node_struct & type) == sc_type_node_struct)) {
         try {
             if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, element, &idtf))
             {
@@ -73,10 +42,21 @@ void printEl(sc_memory_context *context, sc_addr element, FILE *f)
         catch (...) {
             fprintf(f, "%s", "fail");
         }
-    } else if ((sc_type_link & type) == sc_type_link) {
-        fprintf(f, "%u|%u %s", element.seg, element.offset, "!link!");
-    }else
-    {
+    }
+    if ((sc_type_link & type) == sc_type_link) {
+        fprintf(f, "[%s]", printContent(context, element));
+    }
+    if ((sc_type_arc_common & type) == sc_type_arc_common) {
+        sc_addr elem1, elem2;
+        sc_memory_get_arc_begin(context, element, &elem1);
+        sc_memory_get_arc_end(context, element, &elem2);
+        fprintf(f, "(");
+        printEl(context, elem1, f);
+        fprintf(f, " => ");
+        printEl(context, elem2,f);
+        fprintf(f, ")");
+    }
+    if ((sc_type_arc_pos_const_perm & type) == sc_type_arc_pos_const_perm) {
         sc_addr elem1, elem2;
         sc_memory_get_arc_begin(context, element, &elem1);
         sc_memory_get_arc_end(context, element, &elem2);
@@ -88,7 +68,7 @@ void printEl(sc_memory_context *context, sc_addr element, FILE *f)
     }
 }
 
-void printContent(sc_memory_context *context, sc_addr element)
+sc_char *printContent(sc_memory_context *context, sc_addr element)
 {
     sc_stream *stream;
     sc_uint32 length = 0, read_length = 0;
@@ -101,9 +81,8 @@ void printContent(sc_memory_context *context, sc_addr element)
     data = (sc_char *)calloc(length + 1, sizeof(sc_char));
     sc_stream_read_data(stream, data, length, &read_length);
     data[length] = '\0';
-    printf("%s", data);
     sc_stream_free(stream);
-    free(data);
+    return data;
 }
 
 int getInt(sc_memory_context *context, sc_addr element)

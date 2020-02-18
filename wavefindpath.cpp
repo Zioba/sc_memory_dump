@@ -5,8 +5,9 @@ extern "C" {
 }
 
 #include <stdio.h>
-#include <iostream>
 #include <unistd.h>
+#include "model/Node.h"
+#include "model/Edge.h"
 
 using namespace std;
 
@@ -14,6 +15,9 @@ sc_memory_context *context;
 
 sc_addr graph, rrel_arcs, rrel_nodes;
 FILE *f;
+
+Node* nodes;
+Edge* edges;
 
 void print_graph()
 {
@@ -46,13 +50,13 @@ int main()
 {
     sc_memory_params params;
     sc_memory_params_clear(&params);
-    params.repo_path = "/home/artsiom/work/ostis/kb.bin";
-    params.config_file = "/home/artsiom/work/ostis/config/sc-web.ini";
-    params.ext_path = "/home/artsiom/work/ostis/sc-machine/bin/extensions";
+    params.repo_path = "/home/alexander/work/ostis/kb.bin";
+    params.config_file = "/home/alexander/work/ostis/config/sc-web.ini";
+    params.ext_path = "/home/alexander/work/ostis/sc-machine/bin/extensions";
     params.clear = SC_FALSE;
     sc_memory_initialize(&params);
     context = sc_memory_context_new(sc_access_lvl_make_max);
-    f = fopen("/home/artsiom/Desktop/KnowledgeDump.txt", "w");
+    f = fopen("/home/alexander/Desktop/KnowledgeDump.txt", "w");
     run_test();
     fclose(f);
     sc_memory_context_free(context);

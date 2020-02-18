@@ -12,7 +12,7 @@ void printEl(sc_memory_context *context, sc_addr element, FILE *f);
 /*
  * Prints content of given sc-link
 */
-void printContent(sc_memory_context *context, sc_addr element);
+sc_char *printContent(sc_memory_context *context, sc_addr element);
 /*
  * Resolves integer content of given sc-link
 */
