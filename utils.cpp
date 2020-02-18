@@ -42,9 +42,11 @@ void printEl(sc_memory_context *context, sc_addr element, FILE *f)
         catch (...) {
             fprintf(f, "%s", "fail");
         }
+        return;
     }
     if ((sc_type_link & type) == sc_type_link) {
         fprintf(f, "[%s]", printContent(context, element));
+        return;
     }
     if ((sc_type_arc_common & type) == sc_type_arc_common) {
         sc_addr elem1, elem2;
@@ -55,6 +57,7 @@ void printEl(sc_memory_context *context, sc_addr element, FILE *f)
         fprintf(f, " => ");
         printEl(context, elem2,f);
         fprintf(f, ")");
+        return;
     }
     if ((sc_type_arc_pos_const_perm & type) == sc_type_arc_pos_const_perm) {
         sc_addr elem1, elem2;
@@ -65,7 +68,56 @@ void printEl(sc_memory_context *context, sc_addr element, FILE *f)
         fprintf(f, " -> ");
         printEl(context, elem2,f);
         fprintf(f, ")");
+        return;
     }
+    fprintf(f, "unknowElement");
+    if ((sc_type_edge_common & type) == sc_type_edge_common) {
+        fprintf(f, "-sc_type_edge_common\n");
+    }
+    if ((sc_type_arc_access & type) == sc_type_arc_access) {
+        fprintf(f, "-sc_type_arc_access\n");
+    }
+    if ((sc_type_const & type) == sc_type_const) {
+        fprintf(f, "-sc_type_const\n");
+    }
+    if ((sc_type_var & type) == sc_type_var) {
+        fprintf(f, "-sc_type_var\n");
+    }
+    if ((sc_type_arc_pos & type) == sc_type_arc_pos) {
+        fprintf(f, "-sc_type_arc_pos\n");
+    }
+    if ((sc_type_arc_neg & type) == sc_type_arc_neg) {
+        fprintf(f, "-sc_type_arc_neg\n");
+    }
+    if ((sc_type_arc_fuz & type) == sc_type_arc_fuz) {
+        fprintf(f, "-sc_type_arc_fuz\n");
+    }
+    if ((sc_type_arc_perm & type) == sc_type_arc_perm) {
+        fprintf(f, "-sc_type_arc_perm\n");
+    }
+    if ((sc_type_node_tuple & type) == sc_type_node_tuple) {
+        fprintf(f, "-sc_type_node_tuple\n");
+    }
+    if ((sc_type_node_role & type) == sc_type_node_role) {
+        fprintf(f, "-sc_type_node_role\n");
+    }
+    if ((sc_type_node_norole & type) == sc_type_node_norole) {
+        fprintf(f, "-sc_type_node_norole\n");
+    }
+    if ((sc_type_node_class & type) == sc_type_node_class) {
+        fprintf(f, "-sc_type_node_class\n");
+    }
+    if ((sc_type_node_abstract & type) == sc_type_node_abstract) {
+        fprintf(f, "-sc_type_node_abstract\n");
+    }
+    if ((sc_type_node_material & type) == sc_type_node_material) {
+        fprintf(f, "-sc_type_node_material\n");
+    }
+    if ((sc_type_arc_pos_var_perm & type) == sc_type_arc_pos_var_perm) {
+        fprintf(f, "-sc_type_arc_pos_var_perm\n");
+    }
+
+
 }
 
 sc_char *printContent(sc_memory_context *context, sc_addr element)

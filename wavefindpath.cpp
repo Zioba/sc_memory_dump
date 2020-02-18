@@ -22,6 +22,7 @@ Edge* edges;
 void print_graph()
 {
     printEl(context, graph, f);
+    fprintf(f, "%d %d \n", graph.seg, graph.offset);
     fprintf(f, "\n----------------------\n");
 
     sc_iterator3 *it = sc_iterator3_f_a_a_new(context,
@@ -50,13 +51,13 @@ int main()
 {
     sc_memory_params params;
     sc_memory_params_clear(&params);
-    params.repo_path = "/home/alexander/work/ostis/kb.bin";
-    params.config_file = "/home/alexander/work/ostis/config/sc-web.ini";
-    params.ext_path = "/home/alexander/work/ostis/sc-machine/bin/extensions";
+    params.repo_path = "/home/artsiom/work/ostis_eekb/kb.bin";
+    params.config_file = "/home/artsiom/work/ostis_eekb/config/sc-web.ini";
+    params.ext_path = "/home/artsiom/work/ostis_eekb/sc-machine/bin/extensions";
     params.clear = SC_FALSE;
     sc_memory_initialize(&params);
     context = sc_memory_context_new(sc_access_lvl_make_max);
-    f = fopen("/home/alexander/Desktop/KnowledgeDump.txt", "w");
+    f = fopen("/home/artsiom/Desktop/KnowledgeDump.txt", "w");
     run_test();
     fclose(f);
     sc_memory_context_free(context);
