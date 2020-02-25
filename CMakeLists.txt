@@ -1,8 +1,8 @@
-project (wave)
+project (knowledge_base_dump)
 site_name (www.ostis.net)
 cmake_minimum_required (VERSION 2.6)
 
-set(SC_MACHINE_ROOT "/home/alexander/work/ostis/sc-machine/")
+set(SC_MACHINE_ROOT "/home/artsiom/work/ostis/sc-machine/")
 set(SCP_MACHINE_ROOT "${CMAKE_SOURCE_DIR}")
 
 set(CMAKE_BUILD_TYPE Debug)
@@ -38,7 +38,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL Windows)
 
 message(STATUS "CMake generates " ${CMAKE_GENERATOR})
 
-add_executable(wave wavefindpath.cpp utils.cpp utils.h model/Node.cpp model/Node.h model/Edge.cpp model/Edge.h)
+add_executable(knowledge_base_dump wavefindpath.cpp model/Node.cpp model/Node.h wavefindpath.h)
 include_directories(${SC_MEMORY_SRC} ${GLIB2_INCLUDE_DIRS})
 
-target_link_libraries(wave sc-memory ${GLIB2_LIBRARIES})
+target_link_libraries(knowledge_base_dump sc-memory ${GLIB2_LIBRARIES})

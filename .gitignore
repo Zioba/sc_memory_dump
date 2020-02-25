@@ -22,6 +22,7 @@ sc-memory/cpp/scs/*.tokens
 !thirdparty/*/bin/
 
 sc-machine.json
+CMakeLists.txt
 manifest.json
 *.user
 *.*~
