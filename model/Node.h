@@ -9,8 +9,15 @@
 #include <sc-store/sc_types.h>
 
 class Node {
+private:
     sc_addr addr;
-    char* id;
+    int id;
+
+public:
+
+    Node(sc_addr addr, int id);
+    sc_addr get_addr();
+    int get_Id();
 
 };
 
