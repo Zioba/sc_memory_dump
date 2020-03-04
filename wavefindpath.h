@@ -8,7 +8,7 @@
 #include <cstdio>
 
 bool printEl(sc_memory_context *context, sc_addr element, FILE *f);
-void printEl2(sc_memory_context *context, sc_addr element, FILE *f);
+bool printEl2(sc_memory_context *context, sc_addr element, FILE *f);
 bool isAddrExist(sc_addr addr);
 void processElement(_sc_addr addr);
 int getIdByAddr(sc_addr addr);
