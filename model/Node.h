@@ -7,17 +7,24 @@
 
 
 #include <sc-store/sc_types.h>
+#include <vector>
+#include <string>
 
 class Node {
 private:
     sc_addr addr;
     int id;
+    std::vector<std::string> types;
+
 
 public:
 
     Node(sc_addr addr, int id);
-    sc_addr get_addr();
-    int get_Id();
+    ~Node();
+    sc_addr getAddr();
+    int getId();
+    std::vector<std::string> getTypes();
+    void addType(std::string type);
 
 };
 

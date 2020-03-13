@@ -12,6 +12,7 @@ bin
 /site/
 scripts/redis*
 cmake-build-debug/*
+.idea/modules.xml
 
 tools/builder/src/parser/
 sc-memory/cpp/scs/scsLexer.*
