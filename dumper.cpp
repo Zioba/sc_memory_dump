@@ -3,8 +3,8 @@ extern "C" {
 #include "sc_helper.h"
 }
 
-#include "wavefindpath.h"
-#include <stdio.h>
+#include "dumper.h"
+#include <cstdio>
 #include <unistd.h>
 #include "model/Node.h"
 #include <vector>
@@ -13,31 +13,71 @@ using namespace std;
 
 sc_memory_context *context;
 
-sc_addr graph, rrel_arcs, rrel_nodes;
-FILE *f;
+sc_addr graph;
 
 vector<Node> nodeVector;
 int uniqId;
 
-sc_char *printContent(sc_memory_context *context, sc_addr element)
+sc_char *printContent(sc_addr element)
 {
-    sc_stream *stream;
-    sc_uint32 length = 0, read_length = 0;
-    sc_char *data;
-    if (sc_memory_get_link_content(context, element, &stream) != SC_RESULT_OK)
-    {
-        printf("Content reading error\n");
+    sc_char *data = getScAddrName(element);
+    string format;
+    //todo вот у нас есть дата, сначала надо найти есть ли указание формата, и если да, то вывести конвертировать в нужный объект, и сохранить как объект
+    if (checkLinkFormat(element, &format)) {
+        return saveContentFile(element, data, format);
     }
-    sc_stream_get_length(stream, &length);
-    data = (sc_char *)calloc(length + 1, sizeof(sc_char));
-    sc_stream_read_data(stream, data, length, &read_length);
-    data[length] = '\0';
-    sc_stream_free(stream);
     return data;
+}
+
+bool checkLinkFormat(sc_addr element, string *format) {
+    bool result = false;
+    sc_addr nrel_format;
+    sc_helper_resolve_system_identifier(context, NREL_FORMAT_STR, &nrel_format);
+    sc_iterator5 *it = sc_iterator5_f_a_a_a_f_new(context,
+                                              element,
+                                              sc_type_arc_common | sc_type_const,
+                                              0,
+                                              sc_type_arc_pos_const_perm,
+                                              nrel_format);
+    if (SC_TRUE == sc_iterator5_next(it)) {
+        sc_addr t_node = sc_iterator5_value(it, 2);
+        sc_addr idtf;
+        if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, t_node, &idtf))
+        {
+            sc_char *temp = getScAddrName(idtf);
+            string temp_string = "";
+            temp_string.append(temp);
+            size_t n = temp_string.find_last_of('_');
+            if (n != string::npos)
+                *format = temp_string.substr(n + 1);
+            result=true;
+        }
+    }
+    sc_iterator5_free(it);
+    return result;
+}
+
+sc_char *saveContentFile(sc_addr element, char* data, string format) {
+    string filename = "content_";
+    string answer = "file://content/";
+    filename.append(to_string(element.seg));
+    filename.append(to_string(element.offset));
+    filename.append(".");
+    filename.append(format);
+    FILE *f;
+    f = fopen((DUMP_CONTENT_FOLDER + filename).c_str(), "w");
+    fprintf(f, "%s", data);
+    fclose(f);
+    answer.append(filename);
+    char *cstr = new char[answer.length() + 1];
+    strcpy(cstr, answer.c_str());
+    return cstr;
 }
 
 void run_test()
 {
+    FILE *f;
+    f = fopen("/home/alexander/Desktop/KnowledgeDump.scs", "w");
     //char gr[12] = "rootElement";
     char gr[24] = "concertedKB_hash_iF95K2";
     sc_helper_resolve_system_identifier(context, gr, &graph);
@@ -46,30 +86,41 @@ void run_test()
                                               graph,
                                               sc_type_arc_pos_const_perm,
                                               0);
-    std::string x = "";
+    string *x = new std::string("");
     while (SC_TRUE == sc_iterator3_next(it)) {
         sc_addr t_arc = sc_iterator3_value(it, 2);
-        if (printEl(context, t_arc, f)) {
-            fprintf(f, ";;\n");
+        x->clear();
+        if (printEl(t_arc, x)) {
+            string x2 = x->substr(1, x->size()-2);
+            x2.append(";;\n");
+            size_t found = x2.find("nrel_system_identifier");
+            if (found == std::string::npos) {
+                fprintf(f, "%s", x2.c_str());
+            }
         }
     }
-    //std::string x = "";
     fprintf(f, "\n");
     for (int i = 0; i < nodeVector.size(); i++) {
-        if (printEl2(context, nodeVector.at(i).getAddr(), f)) {
+        x->clear();
+        if (printEl2(nodeVector.at(i).getAddr(), x)) {
+            if (!nodeVector.at(i).getTypes().empty()) {
+                fprintf(f, "%s", x->c_str());
+            }
             for (int j = 0; j < nodeVector.at(i).getTypes().size(); j++) {
                 fprintf(f, "<-%s;", nodeVector.at(i).getTypes().at(j).c_str());
             }
-      //      x.append(";\n");
-            fprintf(f, ";\n");
+            if (!nodeVector.at(i).getTypes().empty()) {
+                fprintf(f, ";\n");
+            }
         }
     }
 
     sc_iterator3_free(it);
     nodeVector.clear();
+    fclose(f);
 }
 
-bool printEl2(sc_memory_context *context, sc_addr element, FILE *f) {
+bool printEl2(sc_addr element, string *strBuilder) {
     bool isPrinted = false;
     sc_addr idtf;
     sc_type type;
@@ -78,60 +129,52 @@ bool printEl2(sc_memory_context *context, sc_addr element, FILE *f) {
         ((sc_type_node_struct & type) == sc_type_node_struct)) {
         try {
             if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, element, &idtf)) {
-                sc_stream *stream;
-                sc_uint32 length = 0, read_length = 0;
-                sc_char *data;
-                sc_memory_get_link_content(context, idtf, &stream);
-                sc_stream_get_length(stream, &length);
-                data = (sc_char *) calloc(length + 1, sizeof(sc_char));
-                sc_stream_read_data(stream, data, length, &read_length);
-                data[length] = '\0';
-                fprintf(f, "%s", data);
-                sc_stream_free(stream);
+                sc_char *data = getScAddrName(idtf);
+                strBuilder->append(data);
                 free(data);
             } else {
-                fprintf(f, "..%d", getIdByAddr(element));
+                strBuilder->append("..").append(to_string(getIdByAddr(element)));
             }
         }
         catch (...) {
-            fprintf(f, "%s", "fail");
+            strBuilder->append("fail");
         }
         isPrinted = true;
     }
     return isPrinted;
 }
 
-void printEdge(sc_addr element, const char *connector, Node *node) {
+void printEdge(sc_addr element, const char *connector, Node *node, string *strBuilder) {
     sc_addr elem1, elem2;
     sc_memory_get_arc_begin(context, element, &elem1);
     sc_memory_get_arc_end(context, element, &elem2);
-    fprintf(f, "(");
-    if (!printEl(context, elem1, f)) {
+    strBuilder->append("(");
+    if (!printEl(elem1, strBuilder)) {
         int x = getIdByAddr(elem1);
         if (x!=0) {
-            fprintf(f, "..%d", x);
+            strBuilder->append("..").append(to_string(x));
         }
         else {
-            printEl2(context, elem1, f);
+            printEl2(elem1, strBuilder);
         }
     }
-    fprintf(f, " %s ", connector);
-    if (!printEl(context, elem2,f)) {
+    strBuilder->append(connector);
+    if (!printEl(elem2, strBuilder)) {
         int x = getIdByAddr(elem2);
         if (x!=0) {
-            fprintf(f, "..%d", x);
+            strBuilder->append("..").append(to_string(x));
         }
         else {
-            printEl2(context, elem2, f);
+            printEl2(elem2, strBuilder);
         }
     }
-    fprintf(f, ")");
+    strBuilder->append(")");
     node = new Node(element, uniqId);
     nodeVector.push_back(*node);
     uniqId++;
 }
 
-bool printEl(sc_memory_context *context, sc_addr element, FILE *f)
+bool printEl(sc_addr element, string* strBuilder)
 {
     bool answer = false;
     if (isAddrExist(element)) {
@@ -146,41 +189,32 @@ bool printEl(sc_memory_context *context, sc_addr element, FILE *f)
         try {
             if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, element, &idtf))
             {
-                sc_stream *stream;
-                sc_uint32 length = 0, read_length = 0;
-                sc_char *data;
-                sc_memory_get_link_content(context, idtf, &stream);
-                sc_stream_get_length(stream, &length);
-                data = (sc_char *)calloc(length + 1, sizeof(sc_char));
-                sc_stream_read_data(stream, data, length, &read_length);
-                data[length] = '\0';
-                fprintf(f, "%s", data);
+                sc_char *data = getScAddrName(idtf);
+                strBuilder->append(data);
                 node = new Node(element, 0);
                 nodeVector.push_back(*node);
                 answer = true;
-                sc_stream_free(stream);
                 free(data);
             }
             else
             {
                 node = new Node(element, uniqId);
                 nodeVector.push_back(*node);
-                fprintf(f, "..%d", uniqId);
+                strBuilder->append("..").append(to_string(uniqId));
                 uniqId++;
                 answer = true;
             }
         }
         catch (...) {
-            fprintf(f, "%s", "fail");
+            strBuilder->append("fail");
         }
     }
     if ((sc_type_link & type) == sc_type_link) {
-        fprintf(f, "[%s]", printContent(context, element));
+        strBuilder->append("[").append(printContent(element)).append("]");
         node = new Node(element, uniqId);
         nodeVector.push_back(*node);
         uniqId++;
         answer = true;
-        //return;
     }
     if ((sc_type_arc_common & type) == sc_type_arc_common) {
         const char* connector = ">";
@@ -190,13 +224,13 @@ bool printEl(sc_memory_context *context, sc_addr element, FILE *f)
         if ((sc_type_const & type) == sc_type_const) {
             connector = "=>";
         }
-        printEdge(element, connector, node);
+        printEdge(element, connector, node, strBuilder);
         answer = true;
         return answer;
     }
     if ((sc_type_arc_pos_const_perm & type) == sc_type_arc_pos_const_perm) {
         const char* connector = "->";
-        printEdge(element, connector, node);
+        printEdge(element, connector, node, strBuilder);
         answer = true;
         return answer;
     }
@@ -208,7 +242,7 @@ bool printEl(sc_memory_context *context, sc_addr element, FILE *f)
         if ((sc_type_var & type) == sc_type_var) {
             connector = "_<=>";
         }
-        printEdge(element, connector, node);
+        printEdge(element, connector, node, strBuilder);
         answer = true;
         return answer;
     }
@@ -269,19 +303,9 @@ bool printEl(sc_memory_context *context, sc_addr element, FILE *f)
             ((sc_type_arc_temp & type) == sc_type_arc_temp)) {
             connector = "_~/>";
         }
-        printEdge(element, connector, node);
+        printEdge(element, connector, node, strBuilder);
         answer = true;
         return answer;
-    }
-    if ((sc_type_const & type) == sc_type_const) {
-        if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_const");
-        }
-    }
-    if ((sc_type_var & type) == sc_type_var) {
-        if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_var");
-        }
     }
     if ((sc_type_node_tuple & type) == sc_type_node_tuple) {
         if (node!= NULL) {
@@ -316,6 +340,22 @@ bool printEl(sc_memory_context *context, sc_addr element, FILE *f)
     return answer;
 }
 
+sc_char *getScAddrName(const sc_addr &idtf) {
+    sc_stream *stream;
+    sc_uint32 length;
+    sc_uint32 read_length;
+    if (sc_memory_get_link_content(context, idtf, &stream) != SC_RESULT_OK)
+    {
+        printf("Content reading error\n");
+    }
+    sc_stream_get_length(stream, &length);
+    sc_char *data = (sc_char *)calloc(length + 1, sizeof(sc_char));
+    sc_stream_read_data(stream, data, length, &read_length);
+    data[length] = '\0';
+    sc_stream_free(stream);
+    return data;
+}
+
 bool isAddrExist(sc_addr addr) {
     bool answer = false;
     for (int i = 0; i < nodeVector.size(); i++) {
@@ -348,9 +388,7 @@ int main()
     context = sc_memory_context_new(sc_access_lvl_make_max);
 
     uniqId = 1;
-    f = fopen("/home/alexander/Desktop/KnowledgeDump.txt", "w");
     run_test();
-    fclose(f);
     sc_memory_context_free(context);
     sc_memory_shutdown(SC_TRUE);
 
