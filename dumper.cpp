@@ -20,11 +20,11 @@ int uniqId;
 
 sc_char *printContent(sc_addr element)
 {
-    sc_char *data = getScAddrName(element);
+    sc_uint32 read_length;
+    sc_char *data = getScLinkData(element, read_length);
     string format;
-    //todo вот у нас есть дата, сначала надо найти есть ли указание формата, и если да, то вывести конвертировать в нужный объект, и сохранить как объект
     if (checkLinkFormat(element, &format)) {
-        return saveContentFile(element, data, format);
+        return saveContentFile(element, data, format, read_length);
     }
     return data;
 }
@@ -32,6 +32,7 @@ sc_char *printContent(sc_addr element)
 bool checkLinkFormat(sc_addr element, string *format) {
     bool result = false;
     sc_addr nrel_format;
+    sc_uint32 read_length;
     sc_helper_resolve_system_identifier(context, NREL_FORMAT_STR, &nrel_format);
     sc_iterator5 *it = sc_iterator5_f_a_a_a_f_new(context,
                                               element,
@@ -44,7 +45,7 @@ bool checkLinkFormat(sc_addr element, string *format) {
         sc_addr idtf;
         if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, t_node, &idtf))
         {
-            sc_char *temp = getScAddrName(idtf);
+            sc_char *temp = getScLinkData(idtf, read_length);
             string temp_string = "";
             temp_string.append(temp);
             size_t n = temp_string.find_last_of('_');
@@ -57,7 +58,7 @@ bool checkLinkFormat(sc_addr element, string *format) {
     return result;
 }
 
-sc_char *saveContentFile(sc_addr element, char* data, string format) {
+sc_char *saveContentFile(sc_addr element, char* data, string format, sc_uint32 &read_length) {
     string filename = "content_";
     string answer = "file://content/";
     filename.append(to_string(element.seg));
@@ -66,7 +67,9 @@ sc_char *saveContentFile(sc_addr element, char* data, string format) {
     filename.append(format);
     FILE *f;
     f = fopen((DUMP_CONTENT_FOLDER + filename).c_str(), "w");
-    fprintf(f, "%s", data);
+    for (int i = 0; i < read_length; i++) {
+        fprintf(f, "%c", data[i]);
+    }
     fclose(f);
     answer.append(filename);
     char *cstr = new char[answer.length() + 1];
@@ -124,12 +127,13 @@ bool printEl2(sc_addr element, string *strBuilder) {
     bool isPrinted = false;
     sc_addr idtf;
     sc_type type;
+    sc_uint32 read_length;
     sc_memory_get_element_type(context, element, &type);
     if (((sc_type_node & type) == sc_type_node) |
         ((sc_type_node_struct & type) == sc_type_node_struct)) {
         try {
             if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, element, &idtf)) {
-                sc_char *data = getScAddrName(idtf);
+                sc_char *data = getScLinkData(idtf, read_length);
                 strBuilder->append(data);
                 free(data);
             } else {
@@ -182,6 +186,7 @@ bool printEl(sc_addr element, string* strBuilder)
     }
     sc_addr idtf;
     sc_type type;
+    sc_uint32 read_length;
     Node *node = NULL;
     sc_memory_get_element_type(context, element, &type);
     if (((sc_type_node & type) == sc_type_node) |
@@ -189,7 +194,7 @@ bool printEl(sc_addr element, string* strBuilder)
         try {
             if (SC_RESULT_OK == sc_helper_get_system_identifier_link(context, element, &idtf))
             {
-                sc_char *data = getScAddrName(idtf);
+                sc_char *data = getScLinkData(idtf, read_length);
                 strBuilder->append(data);
                 node = new Node(element, 0);
                 nodeVector.push_back(*node);
@@ -340,16 +345,15 @@ bool printEl(sc_addr element, string* strBuilder)
     return answer;
 }
 
-sc_char *getScAddrName(const sc_addr &idtf) {
+sc_char *getScLinkData(const sc_addr &idtf, sc_uint32 &read_length) {
     sc_stream *stream;
     sc_uint32 length;
-    sc_uint32 read_length;
     if (sc_memory_get_link_content(context, idtf, &stream) != SC_RESULT_OK)
     {
         printf("Content reading error\n");
     }
     sc_stream_get_length(stream, &length);
-    sc_char *data = (sc_char *)calloc(length + 1, sizeof(sc_char));
+    auto data = (sc_char *)calloc(length + 1, sizeof(sc_char));
     sc_stream_read_data(stream, data, length, &read_length);
     data[length] = '\0';
     sc_stream_free(stream);
@@ -376,6 +380,28 @@ int getIdByAddr(sc_addr addr) {
     return -1;
 }
 
+void testPictureSaveFunction() {
+    sc_addr testAddr = sc_memory_node_new(context, sc_type_link);
+    string file = "/home/alexander/Desktop/content/explanation_for_nrel_implication.png";
+    string file2 = "/home/alexander/Desktop/content/explanation_for_nrel_implication_new.png";
+    //f = fopen(file.c_str(), "w");
+    sc_stream *stream = sc_stream_file_new(file.c_str(), SC_STREAM_FLAG_READ);
+    sc_char* data;
+    sc_uint32 read_length = 0;
+    if (stream)
+    {
+        sc_memory_set_link_content(context, testAddr, stream);
+        data = getScLinkData(testAddr, read_length);
+        sc_stream_free(stream);
+    }
+    FILE *f;
+    f = fopen(file2.c_str(), "w");
+    for (int i =0; i < read_length; i++) {
+        fprintf(f, "%c", data[i]);
+    }
+    fclose(f);
+}
+
 int main()
 {
     sc_memory_params params;
@@ -386,6 +412,8 @@ int main()
     params.clear = SC_FALSE;
     sc_memory_initialize(&params);
     context = sc_memory_context_new(sc_access_lvl_make_max);
+
+    //testPictureSaveFunction();
 
     uniqId = 1;
     run_test();
