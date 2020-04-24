@@ -16,6 +16,7 @@ sc_memory_context *context;
 sc_addr graph;
 
 vector<Node> nodeVector;
+vector<string> linkVector;
 int uniqId;
 
 sc_char *printContent(sc_addr element)
@@ -103,6 +104,9 @@ void run_test()
         }
     }
     fprintf(f, "\n");
+//    for (int i = 0; i < linkVector.size(); i++) {
+//        fprintf(f, "%s;;\n", linkVector.at(i).c_str());
+//    }
     for (int i = 0; i < nodeVector.size(); i++) {
         x->clear();
         if (printEl2(nodeVector.at(i).getAddr(), x)) {
@@ -215,7 +219,12 @@ bool printEl(sc_addr element, string* strBuilder)
         }
     }
     if ((sc_type_link & type) == sc_type_link) {
-        strBuilder->append("[").append(printContent(element)).append("]");
+        strBuilder->append("..").append(to_string(uniqId));
+        //strBuilder->append("[").append(printContent(element)).append("]");
+        //тут добавить ==
+        string newLink;
+        newLink.append("..").append(to_string(uniqId)).append(" = [").append(printContent(element)).append("]");
+        linkVector.push_back(newLink);
         node = new Node(element, uniqId);
         nodeVector.push_back(*node);
         uniqId++;
@@ -327,11 +336,11 @@ bool printEl(sc_addr element, string* strBuilder)
             nodeVector.at(nodeVector.size()-1).addType("sc_type_node_norole");
         }
     }
-    if ((sc_type_node_class & type) == sc_type_node_class) {
-        if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_class");
-        }
-    }
+//    if ((sc_type_node_class & type) == sc_type_node_class) {
+//        if (node!= NULL) {
+//            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_class");
+//        }
+//    }
     if ((sc_type_node_abstract & type) == sc_type_node_abstract) {
         if (node!= NULL) {
             nodeVector.at(nodeVector.size()-1).addType("sc_type_node_abstract");
@@ -380,28 +389,6 @@ int getIdByAddr(sc_addr addr) {
     return -1;
 }
 
-void testPictureSaveFunction() {
-    sc_addr testAddr = sc_memory_node_new(context, sc_type_link);
-    string file = "/home/alexander/Desktop/content/explanation_for_nrel_implication.png";
-    string file2 = "/home/alexander/Desktop/content/explanation_for_nrel_implication_new.png";
-    //f = fopen(file.c_str(), "w");
-    sc_stream *stream = sc_stream_file_new(file.c_str(), SC_STREAM_FLAG_READ);
-    sc_char* data;
-    sc_uint32 read_length = 0;
-    if (stream)
-    {
-        sc_memory_set_link_content(context, testAddr, stream);
-        data = getScLinkData(testAddr, read_length);
-        sc_stream_free(stream);
-    }
-    FILE *f;
-    f = fopen(file2.c_str(), "w");
-    for (int i =0; i < read_length; i++) {
-        fprintf(f, "%c", data[i]);
-    }
-    fclose(f);
-}
-
 int main()
 {
     sc_memory_params params;
@@ -412,8 +399,6 @@ int main()
     params.clear = SC_FALSE;
     sc_memory_initialize(&params);
     context = sc_memory_context_new(sc_access_lvl_make_max);
-
-    //testPictureSaveFunction();
 
     uniqId = 1;
     run_test();
