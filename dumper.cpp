@@ -104,9 +104,9 @@ void run_test()
         }
     }
     fprintf(f, "\n");
-//    for (int i = 0; i < linkVector.size(); i++) {
-//        fprintf(f, "%s;;\n", linkVector.at(i).c_str());
-//    }
+    for (int i = 0; i < linkVector.size(); i++) {
+        fprintf(f, "%s;;\n", linkVector.at(i).c_str());
+    }
     for (int i = 0; i < nodeVector.size(); i++) {
         x->clear();
         if (printEl2(nodeVector.at(i).getAddr(), x)) {
@@ -221,7 +221,6 @@ bool printEl(sc_addr element, string* strBuilder)
     if ((sc_type_link & type) == sc_type_link) {
         strBuilder->append("..").append(to_string(uniqId));
         //strBuilder->append("[").append(printContent(element)).append("]");
-        //тут добавить ==
         string newLink;
         newLink.append("..").append(to_string(uniqId)).append(" = [").append(printContent(element)).append("]");
         linkVector.push_back(newLink);
