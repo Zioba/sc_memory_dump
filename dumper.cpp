@@ -82,7 +82,6 @@ void run_test()
 {
     FILE *f;
     f = fopen("/home/alexander/Desktop/KnowledgeDump.scs", "w");
-    //char gr[12] = "rootElement";
     char gr[24] = "concertedKB_hash_iF95K2";
     sc_helper_resolve_system_identifier(context, gr, &graph);
 
@@ -104,9 +103,6 @@ void run_test()
         }
     }
     fprintf(f, "\n");
-    for (int i = 0; i < linkVector.size(); i++) {
-        fprintf(f, "%s;;\n", linkVector.at(i).c_str());
-    }
     for (int i = 0; i < nodeVector.size(); i++) {
         x->clear();
         if (printEl2(nodeVector.at(i).getAddr(), x)) {
@@ -124,6 +120,11 @@ void run_test()
 
     sc_iterator3_free(it);
     nodeVector.clear();
+    fclose(f);
+    f = fopen("/home/alexander/Desktop/KnowledgeDumpLinks.scs", "w");
+    for (int i = 0; i < linkVector.size(); i++) {
+        fprintf(f, "%s;;\n", linkVector.at(i).c_str());
+    }
     fclose(f);
 }
 
@@ -220,7 +221,6 @@ bool printEl(sc_addr element, string* strBuilder)
     }
     if ((sc_type_link & type) == sc_type_link) {
         strBuilder->append("..").append(to_string(uniqId));
-        //strBuilder->append("[").append(printContent(element)).append("]");
         string newLink;
         newLink.append("..").append(to_string(uniqId)).append(" = [").append(printContent(element)).append("]");
         linkVector.push_back(newLink);
@@ -322,32 +322,32 @@ bool printEl(sc_addr element, string* strBuilder)
     }
     if ((sc_type_node_tuple & type) == sc_type_node_tuple) {
         if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_tuple");
+            nodeVector.at(nodeVector.size()-1).addType("sc_node_not_binary_tuple");
         }
     }
     if ((sc_type_node_role & type) == sc_type_node_role) {
         if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_role");
+            nodeVector.at(nodeVector.size()-1).addType("sc_node_role_relation");
         }
     }
     if ((sc_type_node_norole & type) == sc_type_node_norole) {
         if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_norole");
+            nodeVector.at(nodeVector.size()-1).addType("sc_node_norole_relation");
         }
     }
-//    if ((sc_type_node_class & type) == sc_type_node_class) {
+    if ((sc_type_node_class & type) == sc_type_node_class) {
+        if (node!= NULL) {
+            nodeVector.at(nodeVector.size()-1).addType("sc_node_not_relation");
+        }
+    }
+//    if ((sc_type_node_abstract & type) == sc_type_node_abstract) {
 //        if (node!= NULL) {
-//            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_class");
+//            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_abstract");
 //        }
 //    }
-    if ((sc_type_node_abstract & type) == sc_type_node_abstract) {
-        if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_abstract");
-        }
-    }
     if ((sc_type_node_material & type) == sc_type_node_material) {
         if (node!= NULL) {
-            nodeVector.at(nodeVector.size()-1).addType("sc_type_node_material");
+            nodeVector.at(nodeVector.size()-1).addType("sc_node_material");
         }
     }
     return answer;
